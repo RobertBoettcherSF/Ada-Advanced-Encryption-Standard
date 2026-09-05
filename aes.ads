@@ -1,7 +1,6 @@
 with Interfaces;
 
 package AES is
-   pragma Pure;
 
    -- Domain types for strict typing of bytes and blocks.
    type Byte is new Interfaces.Unsigned_8;
