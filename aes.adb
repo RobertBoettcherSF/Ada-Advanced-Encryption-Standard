@@ -17,12 +17,12 @@ package body AES is
          declare
             High_Bit_Set : constant Boolean := (AA and 16#80#) /= 0;
          begin
-            AA := Interfaces.Shift_Left (AA, 1);
+            AA := Byte (Interfaces.Shift_Left (Interfaces.Unsigned_8 (AA), 1));
             if High_Bit_Set then
                AA := AA xor 16#1B#;
             end if;
          end;
-         BB := Interfaces.Shift_Right (BB, 1);
+         BB := Byte (Interfaces.Shift_Right (Interfaces.Unsigned_8 (BB), 1));
       end loop;
       return P;
    end GF_Mult;
@@ -42,11 +42,10 @@ package body AES is
 
    -- Applies the AES Affine Transformation to a byte
    function Affine_Transform (B : Byte) return Byte is
-      use Interfaces;
-      B1 : constant Byte := Rotate_Left (B, 1);
-      B2 : constant Byte := Rotate_Left (B, 2);
-      B3 : constant Byte := Rotate_Left (B, 3);
-      B4 : constant Byte := Rotate_Left (B, 4);
+      B1 : constant Byte := Byte (Interfaces.Rotate_Left (Interfaces.Unsigned_8 (B), 1));
+      B2 : constant Byte := Byte (Interfaces.Rotate_Left (Interfaces.Unsigned_8 (B), 2));
+      B3 : constant Byte := Byte (Interfaces.Rotate_Left (Interfaces.Unsigned_8 (B), 3));
+      B4 : constant Byte := Byte (Interfaces.Rotate_Left (Interfaces.Unsigned_8 (B), 4));
    begin
       return B xor B1 xor B2 xor B3 xor B4 xor 16#63#;
    end Affine_Transform;
@@ -76,7 +75,7 @@ package body AES is
 
    -- Generates the Round Constant (Rcon) values
    function Init_Rcon return Rcon_Type is
-      R : Rcon_Type := (others => 0);
+      R : Rcon_Type := [others => 0];
    begin
       R (1) := 16#01#;
       for I in 2 .. 14 loop
@@ -187,17 +186,17 @@ package body AES is
 
    function Sub_Word (W : Word) return Word is
    begin
-      return (S_Box (W(0)), S_Box (W(1)), S_Box (W(2)), S_Box (W(3)));
+      return [S_Box (W(0)), S_Box (W(1)), S_Box (W(2)), S_Box (W(3))];
    end Sub_Word;
 
    function Rot_Word (W : Word) return Word is
    begin
-      return (W(1), W(2), W(3), W(0));
+      return [W(1), W(2), W(3), W(0)];
    end Rot_Word;
 
    function Xor_Word (A, B : Word) return Word is
    begin
-      return (A(0) xor B(0), A(1) xor B(1), A(2) xor B(2), A(3) xor B(3));
+      return [A(0) xor B(0), A(1) xor B(1), A(2) xor B(2), A(3) xor B(3)];
    end Xor_Word;
 
    procedure Expand_Key (Key : Byte_Array; W : out Word_Array) is
@@ -205,10 +204,10 @@ package body AES is
       Temp : Word;
    begin
       for I in 0 .. Nk - 1 loop
-         W (I) := (Key (Key'First + I * 4), 
+         W (I) := [Key (Key'First + I * 4), 
                    Key (Key'First + I * 4 + 1), 
                    Key (Key'First + I * 4 + 2), 
-                   Key (Key'First + I * 4 + 3));
+                   Key (Key'First + I * 4 + 3)];
       end loop;
 
       for I in Nk .. W'Last loop
