@@ -17,8 +17,13 @@ procedure Tests is
    end Check;
 
    -- FIPS 197 Vectors
+   -- Appendix B Plaintext (Used for AES-128 test vector)
    FIPS_Plain   : constant Block := [16#32#, 16#43#, 16#F6#, 16#A8#, 16#88#, 16#5A#, 16#30#, 16#8D#, 
                                      16#31#, 16#31#, 16#98#, 16#A2#, 16#E0#, 16#37#, 16#07#, 16#34#];
+
+   -- Appendix C Plaintext (Used for AES-192 and AES-256 test vectors)
+   FIPS_Plain_C : constant Block := [16#00#, 16#11#, 16#22#, 16#33#, 16#44#, 16#55#, 16#66#, 16#77#, 
+                                     16#88#, 16#99#, 16#AA#, 16#BB#, 16#CC#, 16#DD#, 16#EE#, 16#FF#];
    
    K128         : constant Key_128 := [16#2B#, 16#7E#, 16#15#, 16#16#, 16#28#, 16#AE#, 16#D2#, 16#A6#, 
                                        16#AB#, 16#F7#, 16#15#, 16#88#, 16#09#, 16#CF#, 16#4F#, 16#3C#];
@@ -62,9 +67,9 @@ begin
 
    -- TEST 3: AES-192 Encryption Functional Check
    Put_Line ("TEST 3 — AES-192 Encrypt (FIPS 197)");
-   Encrypt_Block_192 (FIPS_Plain, K192, Cipher);
+   Encrypt_Block_192 (FIPS_Plain_C, K192, Cipher);
    Check ("3.1 Cipher is full length", Cipher'Length = 16);
-   Check ("3.2 Cipher differs from plaintext", Cipher /= FIPS_Plain);
+   Check ("3.2 Cipher differs from plaintext", Cipher /= FIPS_Plain_C);
    Check ("3.3 Matches FIPS 197 exact vector", Cipher = Expected_192);
 
    -- TEST 4: AES-192 Decryption Functional Check
@@ -72,13 +77,13 @@ begin
    Decrypt_Block_192 (Cipher, K192, Decrypted);
    Check ("4.1 Decrypted output is full length", Decrypted'Length = 16);
    Check ("4.2 Decrypted differs from Cipher", Decrypted /= Cipher);
-   Check ("4.3 Reconstructs original plaintext", Decrypted = FIPS_Plain);
+   Check ("4.3 Reconstructs original plaintext", Decrypted = FIPS_Plain_C);
 
    -- TEST 5: AES-256 Encryption Functional Check
    Put_Line ("TEST 5 — AES-256 Encrypt (FIPS 197)");
-   Encrypt_Block_256 (FIPS_Plain, K256, Cipher);
+   Encrypt_Block_256 (FIPS_Plain_C, K256, Cipher);
    Check ("5.1 Cipher is full length", Cipher'Length = 16);
-   Check ("5.2 Cipher differs from plaintext", Cipher /= FIPS_Plain);
+   Check ("5.2 Cipher differs from plaintext", Cipher /= FIPS_Plain_C);
    Check ("5.3 Matches FIPS 197 exact vector", Cipher = Expected_256);
 
    -- TEST 6: AES-256 Decryption Functional Check
@@ -86,7 +91,7 @@ begin
    Decrypt_Block_256 (Cipher, K256, Decrypted);
    Check ("6.1 Decrypted output is full length", Decrypted'Length = 16);
    Check ("6.2 Decrypted differs from Cipher", Decrypted /= Cipher);
-   Check ("6.3 Reconstructs original plaintext", Decrypted = FIPS_Plain);
+   Check ("6.3 Reconstructs original plaintext", Decrypted = FIPS_Plain_C);
 
    -- TEST 7: Empty Inputs (ECB Mode)
    Put_Line ("TEST 7 — Empty Data Handled Without Error");
@@ -144,8 +149,8 @@ begin
       Expected_Block : Byte_Array (1 .. 16);
    begin
       for I in 0 .. 15 loop 
-         Data (1 + I) := FIPS_Plain (I);
-         Data (17 + I) := FIPS_Plain (I);
+         Data (1 + I) := FIPS_Plain_C (I);
+         Data (17 + I) := FIPS_Plain_C (I);
          Expected_Block (1 + I) := Expected_256 (I);
       end loop;
       
@@ -166,7 +171,7 @@ begin
       
       Decrypt_ECB_256 (Cipher_In, K256, Plain_Out);
       Check ("11.1 Successfully reversed 32 bytes", Plain_Out'Length = 32);
-      Check ("11.2 Reconstructed Block 1 correctly", Plain_Out (1) = 16#32#);
+      Check ("11.2 Reconstructed Block 1 correctly", Plain_Out (1) = 16#00#);
       Check ("11.3 Block 1 and Block 2 plaintexts are identical", Plain_Out (1 .. 16) = Plain_Out (17 .. 32));
    end;
 
