@@ -17,29 +17,29 @@ procedure Tests is
    end Check;
 
    -- FIPS 197 Vectors
-   FIPS_Plain   : constant Block := (16#32#, 16#43#, 16#F6#, 16#A8#, 16#88#, 16#5A#, 16#30#, 16#8D#, 
-                                     16#31#, 16#31#, 16#98#, 16#A2#, 16#E0#, 16#37#, 16#07#, 16#34#);
+   FIPS_Plain   : constant Block := [16#32#, 16#43#, 16#F6#, 16#A8#, 16#88#, 16#5A#, 16#30#, 16#8D#, 
+                                     16#31#, 16#31#, 16#98#, 16#A2#, 16#E0#, 16#37#, 16#07#, 16#34#];
    
-   K128         : constant Key_128 := (16#2B#, 16#7E#, 16#15#, 16#16#, 16#28#, 16#AE#, 16#D2#, 16#A6#, 
-                                       16#AB#, 16#F7#, 16#15#, 16#88#, 16#09#, 16#CF#, 16#4F#, 16#3C#);
-   Expected_128 : constant Block := (16#39#, 16#25#, 16#84#, 16#1D#, 16#02#, 16#DC#, 16#09#, 16#FB#, 
-                                     16#DC#, 16#11#, 16#85#, 16#97#, 16#19#, 16#6A#, 16#0B#, 16#32#);
+   K128         : constant Key_128 := [16#2B#, 16#7E#, 16#15#, 16#16#, 16#28#, 16#AE#, 16#D2#, 16#A6#, 
+                                       16#AB#, 16#F7#, 16#15#, 16#88#, 16#09#, 16#CF#, 16#4F#, 16#3C#];
+   Expected_128 : constant Block := [16#39#, 16#25#, 16#84#, 16#1D#, 16#02#, 16#DC#, 16#09#, 16#FB#, 
+                                     16#DC#, 16#11#, 16#85#, 16#97#, 16#19#, 16#6A#, 16#0B#, 16#32#];
 
-   K192         : constant Key_192 := (16#8E#, 16#73#, 16#B0#, 16#F7#, 16#DA#, 16#0E#, 16#64#, 16#52#, 
+   K192         : constant Key_192 := [16#8E#, 16#73#, 16#B0#, 16#F7#, 16#DA#, 16#0E#, 16#64#, 16#52#, 
                                        16#C8#, 16#10#, 16#F3#, 16#2B#, 16#80#, 16#90#, 16#79#, 16#E5#, 
-                                       16#62#, 16#F8#, 16#EA#, 16#D2#, 16#52#, 16#2C#, 16#6B#, 16#7B#);
-   Expected_192 : constant Block := (16#BD#, 16#33#, 16#4F#, 16#1D#, 16#6E#, 16#45#, 16#F2#, 16#5F#, 
-                                     16#F7#, 16#12#, 16#A2#, 16#14#, 16#57#, 16#11#, 16#A5#, 16#27#);
+                                       16#62#, 16#F8#, 16#EA#, 16#D2#, 16#52#, 16#2C#, 16#6B#, 16#7B#];
+   Expected_192 : constant Block := [16#BD#, 16#33#, 16#4F#, 16#1D#, 16#6E#, 16#45#, 16#F2#, 16#5F#, 
+                                     16#F7#, 16#12#, 16#A2#, 16#14#, 16#57#, 16#11#, 16#A5#, 16#27#];
 
-   K256         : constant Key_256 := (16#60#, 16#3D#, 16#EB#, 16#10#, 16#15#, 16#CA#, 16#71#, 16#BE#, 
+   K256         : constant Key_256 := [16#60#, 16#3D#, 16#EB#, 16#10#, 16#15#, 16#CA#, 16#71#, 16#BE#, 
                                        16#2B#, 16#73#, 16#AE#, 16#F0#, 16#85#, 16#7D#, 16#77#, 16#81#, 
                                        16#1F#, 16#35#, 16#2C#, 16#07#, 16#3B#, 16#61#, 16#08#, 16#D7#, 
-                                       16#2D#, 16#98#, 16#10#, 16#A3#, 16#09#, 16#14#, 16#DF#, 16#F4#);
-   Expected_256 : constant Block := (16#F3#, 16#EE#, 16#D1#, 16#BD#, 16#B5#, 16#D2#, 16#A0#, 16#3C#, 
-                                     16#06#, 16#4B#, 16#5A#, 16#7E#, 16#3D#, 16#B1#, 16#81#, 16#F8#);
+                                       16#2D#, 16#98#, 16#10#, 16#A3#, 16#09#, 16#14#, 16#DF#, 16#F4#];
+   Expected_256 : constant Block := [16#F3#, 16#EE#, 16#D1#, 16#BD#, 16#B5#, 16#D2#, 16#A0#, 16#3C#, 
+                                     16#06#, 16#4B#, 16#5A#, 16#7E#, 16#3D#, 16#B1#, 16#81#, 16#F8#];
 
    Cipher, Decrypted : Block;
-   Empty_Array       : constant Byte_Array (1 .. 0) := (others => 0);
+   Empty_Array       : constant Byte_Array (1 .. 0) := [others => 0];
    Empty_Output      : Byte_Array (1 .. 0);
 
 begin
@@ -103,8 +103,8 @@ begin
    -- TEST 8: Invalid Length Exception Check
    Put_Line ("TEST 8 — Rejects Invalid Padding/Sizes (Exception)");
    declare
-      Bad_Input : constant Byte_Array (1 .. 15) := (others => 0);
-      Out_Data  : Byte_Array (1 .. 15) := (others => 99);
+      Bad_Input : constant Byte_Array (1 .. 15) := [others => 0];
+      Out_Data  : Byte_Array (1 .. 15) := [others => 99];
       Raised    : Boolean := False;
    begin
       begin
@@ -121,8 +121,8 @@ begin
    -- TEST 9: Small Destination Buffer Exception Check
    Put_Line ("TEST 9 — Rejects Overflows to Tiny Buffers");
    declare
-      Good_Input : constant Byte_Array (1 .. 16) := (others => 1);
-      Bad_Output : Byte_Array (1 .. 15) := (others => 99);
+      Good_Input : constant Byte_Array (1 .. 16) := [others => 1];
+      Bad_Output : Byte_Array (1 .. 15) := [others => 99];
       Raised     : Boolean := False;
    begin
       begin
@@ -139,16 +139,20 @@ begin
    -- TEST 10: Multi-Block Encryption
    Put_Line ("TEST 10 — Multi-Block Encrypt Integrity");
    declare
-      Data     : Byte_Array (1 .. 32);
-      Out_Data : Byte_Array (1 .. 32);
+      Data           : Byte_Array (1 .. 32);
+      Out_Data       : Byte_Array (1 .. 32);
+      Expected_Block : Byte_Array (1 .. 16);
    begin
-      for I in 0 .. 15 loop Data (1 + I) := FIPS_Plain (I); end loop;
-      for I in 0 .. 15 loop Data (17 + I) := FIPS_Plain (I); end loop;
+      for I in 0 .. 15 loop 
+         Data (1 + I) := FIPS_Plain (I);
+         Data (17 + I) := FIPS_Plain (I);
+         Expected_Block (1 + I) := Expected_256 (I);
+      end loop;
       
       Encrypt_ECB_256 (Data, K256, Out_Data);
       Check ("10.1 Successfully processed 32 bytes (2 blocks)", Out_Data'Length = 32);
-      Check ("10.2 Block 1 matches standalone AES", Out_Data (1 .. 16) = Byte_Array'(1 .. 16 => 1) xor Byte_Array'(1 .. 16 => 1) xor Out_Data (1 .. 16)); -- force matching type
-      Check ("10.3 Block 2 matches standalone AES", Out_Data (17 .. 32) = Out_Data (1 .. 16));
+      Check ("10.2 Block 1 matches standalone AES", Out_Data (1 .. 16) = Expected_Block);
+      Check ("10.3 Block 2 matches standalone AES", Out_Data (17 .. 32) = Expected_Block);
    end;
 
    -- TEST 11: Multi-Block Decryption
@@ -188,8 +192,8 @@ begin
    -- TEST 13: Zeros Identity Check
    Put_Line ("TEST 13 — Identity Check (Zero-filled data & key)");
    declare
-      Zero_Key   : constant Key_128 := (others => 0);
-      Zero_Data  : constant Block   := (others => 0);
+      Zero_Key   : constant Key_128 := [others => 0];
+      Zero_Data  : constant Block   := [others => 0];
       Enc_Zeroes : Block;
       Dec_Zeroes : Block;
    begin
